@@ -18,7 +18,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 
 # SECURITY WARNING: keep the secret key used in production secret!
 # This value has been moved into secrets.yml to keep it safe
-SECRET_KEY = ''
+SECRET_KEY = 'put_your_real_secret_key_value_in_secrets.py'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -57,6 +57,8 @@ WSGI_APPLICATION = 'workshop.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/1.7/ref/settings/#databases
 
+# For databases other than sqlite that require a username and password,
+# put the configuration in secrets.py.  This is left as a default.
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
