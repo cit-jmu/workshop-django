@@ -5,6 +5,7 @@ django-dotenv==1.2
 django-toolbelt==0.0.1
 gunicorn==19.1.1
 psycopg2==2.5.4
+python-ldap==2.4.16
 pytz==2014.7
 static3==0.5.1
 wsgiref==0.1.2
