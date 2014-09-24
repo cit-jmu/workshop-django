@@ -13,6 +13,9 @@ import os
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 TEMPLATE_DIRS = [os.path.join(BASE_DIR, 'templates')]
 
+# set environment, default to 'development'
+DJANGO_ENV = os.environ.get("DJANGO_ENV", "development")
+
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.7/howto/deployment/checklist/
 
@@ -20,12 +23,11 @@ TEMPLATE_DIRS = [os.path.join(BASE_DIR, 'templates')]
 SECRET_KEY = os.environ['SECRET_KEY']
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
-TEMPLATE_DEBUG = True
+TEMPLATE_DEBUG = False
 
 ALLOWED_HOSTS = []
-
 
 # Application definition
 
@@ -36,6 +38,7 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'profiles'
 )
 
 MIDDLEWARE_CLASSES = (
@@ -89,3 +92,40 @@ STATIC_URL = '/static/'
 STATICFILES_DIRS = (
   os.path.join(BASE_DIR, 'static'),
 )
+
+# Logging
+# https://docs.djangoproject.com/en/1.7/topics/logging/
+LOGGING = {
+  'version': 1,
+  'disable_existing_loggers': False,
+  'formatters': {
+    'standard': {
+      'format': '[%(asctime)s] %(levelname)s (%(name)s:%(lineno)s) %(message)s'
+    },
+  },
+  'handlers': {
+    'file': {
+      'level': 'DEBUG',
+      'class': 'logging.FileHandler',
+      'filename': "log/%s.log" % DJANGO_ENV,
+      'formatter': 'standard',
+    },
+  },
+  'loggers': {
+    'workshop': {
+      'handlers': ['file'],
+      'level': 'DEBUG',
+    }
+  },
+}
+
+# import environment settings, these will overwrite any default settings above
+from importlib import import_module
+try:
+  module = import_module("workshop.environments.%s" % DJANGO_ENV)
+  for setting in dir(module):
+    # assume that all valid settings are uppercase, following Django standards
+    # this also eliminates things like '__name__' or '__file__'
+    if setting == setting.upper(): locals()[setting] = getattr(module, setting)
+except:
+  pass
