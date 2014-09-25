@@ -51,6 +51,11 @@ MIDDLEWARE_CLASSES = (
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 )
 
+AUTHENTICATION_BACKENDS = (
+  'auth.backends.LDAPBackend',
+  'django.contrib.auth.backends.ModelBackend',
+)
+
 ROOT_URLCONF = 'workshop.urls'
 
 WSGI_APPLICATION = 'workshop.wsgi.application'
@@ -117,6 +122,18 @@ LOGGING = {
       'level': 'DEBUG',
     }
   },
+}
+
+LDAP_AUTH = {
+  'uri': "ldap://ldap.ad.jmu.edu",
+  'secure': True,
+  'base': "ou=JMUma,dc=ad,dc=jmu,dc=edu",
+  'search_filter': "sAMAccountName=%s",
+  'attrlist': (
+    'givenName', 'sn', 'mail', 'telephoneNumber', 'postOfficeBox', 'ou',
+    'eduPersonAffiliation', 'jmunickname',
+  ),
+  'local_admin_user': "admin",
 }
 
 # import environment settings, these will overwrite any default settings above
