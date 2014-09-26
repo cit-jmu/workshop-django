@@ -12,7 +12,7 @@ class Profile(models.Model):
   # relationship to the user model
   user = models.OneToOneField(User)
 
-  employee_id = models.PositiveIntegerField()
+  employee_id = models.CharField(max_length=10)
   phone_number = models.CharField(max_length=25)
   mailbox = models.CharField(max_length=25)
   department = models.CharField(max_length=255)
