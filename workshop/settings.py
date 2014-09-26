@@ -136,6 +136,11 @@ LDAP_AUTH = {
   'local_admin_user': "admin",
 }
 
+# Customize login, logout, and profile urls
+LOGIN_REDIRECT_URL = '/profile/'
+LOGIN_URL = '/login/'
+LOGOUT_URL = '/logout/'
+
 # import environment settings, these will overwrite any default settings above
 from importlib import import_module
 try:
