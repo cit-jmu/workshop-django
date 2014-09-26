@@ -41,7 +41,8 @@ class LDAPBackend(object):
       try:
         user = User.objects.get(username=username)
       except User.DoesNotExist:
-        user = User(username=username, password=self._generate_password())
+        user = User.objects.create_user(username)
+
       # update the user with the current directory information
       user.first_name = attributes['givenName'][0]
       user.last_name = attributes['sn'][0]
@@ -53,6 +54,7 @@ class LDAPBackend(object):
         profile = user.profile
       except Profile.DoesNotExist:
         profile = Profile()
+
       # update the user's profile
       profile.phone_number = attributes['telephoneNumber'][0]
       profile.mailbox = attributes['postOfficeBox'][0]
@@ -81,7 +83,8 @@ class LDAPBackend(object):
       else:
         self.logger.error("LDAP Error: %s" % e)
     finally:
-      if l: l.unbind_s()
+      if l:
+        l.unbind_s()
 
     return None
 
@@ -91,8 +94,3 @@ class LDAPBackend(object):
       return User.objects.get(pk=user_id)
     except User.DoesNotExist:
       return None
-
-
-  def _generate_password(self):
-    charset = string.ascii_letters + string.digits
-    return make_password(''.join(random.sample(charset, 18)))
