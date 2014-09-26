@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% load bootstrap3 %}
 
 {% block content %}
 
@@ -6,4 +7,9 @@
 <a href="{% url 'profile' %}">profile</a>
 <a href="{% url 'login' %}">login</a>
 <a href="{% url 'logout' %}">logout</a>
+
+<hr />
+
+{% bootstrap_form form %}
+
 {% endblock %}

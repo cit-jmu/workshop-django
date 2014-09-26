@@ -1,10 +1,28 @@
 <!DOCTYPE html>
+{% load bootstrap3 %}
 <html lang="en">
-<head>
-  <title>{% block title %}CIT | Workshop{% endblock %}</title>
-</head>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{% block title %}CIT | Workshop{% endblock %}</title>
 
-<body>
-  {% block content %}{% endblock %}
-</body>
+    <!-- Bootstrap CSS -->
+    {% bootstrap_css %}
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+      <script src="//oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+      <script src="//oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    {% bootstrap_messages %}
+
+    {% block content %}{% endblock %}
+
+    <!-- jQuery + Bootstrap JS -->
+    {% bootstrap_javascript jquery=True %}
+  </body>
 </html>

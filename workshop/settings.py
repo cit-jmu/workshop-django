@@ -38,7 +38,8 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'profiles'
+    'bootstrap3',
+    'profiles',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -140,6 +141,11 @@ LDAP_AUTH = {
 LOGIN_REDIRECT_URL = '/profile/'
 LOGIN_URL = '/login/'
 LOGOUT_URL = '/logout/'
+
+# Bootstrap3
+BOOTSTRAP3 = {
+  'success_css_class': '',
+}
 
 # import environment settings, these will overwrite any default settings above
 from importlib import import_module
