@@ -11,13 +11,15 @@ from django.contrib.auth.hashers import make_password
 from profiles.models import Profile
 
 class LDAPBackend(object):
+  # FIXME: there is no 'profile' app logger defined, so this is pointless right
+  # now.  need to setup logging so it works w/o so much manual config
   logger = logging.getLogger(__name__)
 
   uri = settings.LDAP_AUTH['uri']
   base = settings.LDAP_AUTH['base']
   secure = settings.LDAP_AUTH['secure']
   search_filter = settings.LDAP_AUTH['search_filter']
-  attrlist = settings.LDAP_AUTH['attrlist']
+  attributes = settings.LDAP_AUTH['attributes']
   local_admin_user = settings.LDAP_AUTH['local_admin_user']
 
   def authenticate(self, username=None, password=None):
@@ -31,11 +33,17 @@ class LDAPBackend(object):
       # authenticate to LDAP
       l.simple_bind_s("%s@jmu.edu" % username, password)
       # read our attributes
-      result = l.search_s(self.base,
+      results = l.search_s(self.base,
                           ldap.SCOPE_SUBTREE,
                           self.search_filter % username,
-                          attrlist=self.attrlist)
-      attributes = result[0][1]
+                          attrlist=self.attributes.keys())
+      results = results[0][1]
+
+      # split results into user/profile attributes and normalize field names
+      attributes = {'user': {}, 'profile': {}}
+      for attr in self.attributes:
+        (obj, field) = self.attributes[attr].split('.')
+        attributes[obj][field] = results.get(attr, [''])
 
       # see if we have a user
       try:
@@ -44,9 +52,9 @@ class LDAPBackend(object):
         user = User.objects.create_user(username)
 
       # update the user with the current directory information
-      user.first_name = attributes['givenName'][0]
-      user.last_name = attributes['sn'][0]
-      user.email = attributes['mail'][0]
+      user.first_name = attributes['user']['first_name'][0]
+      user.last_name = attributes['user']['last_name'][0]
+      user.email = attributes['user']['email'][0]
       user.save()
 
       # see if the user has a profile
@@ -56,17 +64,23 @@ class LDAPBackend(object):
         profile = Profile()
 
       # update the user's profile
-      profile.phone_number = attributes['telephoneNumber'][0]
-      profile.mailbox = attributes['postOfficeBox'][0]
-      profile.department = attributes['ou'][0]
-      if "faculty" in attributes['eduPersonAffiliation']:
+      profile.employee_id = attributes['profile']['employee_id'][0]
+      profile.phone_number = attributes['profile']['phone_number'][0]
+      profile.mailbox = attributes['profile']['mailbox'][0]
+      profile.department = attributes['profile']['department'][0]
+      profile.nickname = attributes['profile']['nickname'][0]
+      # affiliation is handled a little differently, we need to check to see
+      # if 'faculty' or 'staff' is in the affiliation list
+      if "faculty" in attributes['profile']['affiliation']:
         profile.affiliation = "faculty"
-      elif "staff" in attributes['eduPersonAffiliation']:
+      elif "staff" in attributes['profile']['affiliation']:
         profile.affiliation = "staff"
       else:
         profile.affiliation = "other"
-      # 'jmunickname' attribute may not be set, so give it a default
-      profile.nickname = attributes.get('jmunickname', [''])[0]
+
+      # if there is no employee_id, set it to all zeros
+      if not profile.employee_id:
+        profile.employee_id = '000000000'
 
       # set the profile in the user and save it
       user.profile = profile

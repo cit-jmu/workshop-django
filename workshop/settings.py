@@ -130,10 +130,17 @@ LDAP_AUTH = {
   'secure': True,
   'base': "ou=JMUma,dc=ad,dc=jmu,dc=edu",
   'search_filter': "sAMAccountName=%s",
-  'attrlist': (
-    'givenName', 'sn', 'mail', 'telephoneNumber', 'postOfficeBox', 'ou',
-    'eduPersonAffiliation', 'jmunickname',
-  ),
+  'attributes': {
+    'givenName': "user.first_name",
+    'sn': "user.last_name",
+    'mail': "user.email",
+    'telephoneNumber': "profile.phone_number",
+    'postOfficeBox': "profile.mailbox",
+    'ou': "profile.department",
+    'eduPersonAffiliation': "profile.affiliation",
+    'jmunickname': "profile.nickname",
+    'employeeID': "profile.employee_id",
+  },
   'local_admin_user': "admin",
 }
 
