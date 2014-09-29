@@ -151,7 +151,8 @@ LOGOUT_URL = '/logout/'
 
 # Bootstrap3
 BOOTSTRAP3 = {
-  'success_css_class': '',
+  # configure the base_url setting manually so we control the version
+  'base_url': '//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/',
 }
 
 # import environment settings, these will overwrite any default settings above

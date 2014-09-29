@@ -18,11 +18,46 @@
     <![endif]-->
   </head>
   <body>
-    {% bootstrap_messages %}
+    <div class="container">
+      <!-- Main Navigation -->
+      <div class="navbar navbar-default" role="navigation">
+        <div class="container-fluid">
+          <!-- Brand and toggle get grouped for better mobile display -->
+          <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target=".navbar-collapse">
+              <span class="sr-only">Toggle navigation</span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="#">CIT | Workshop</a>
+          </div>
 
-    {% block content %}{% endblock %}
+          <!-- Collect the nav links, forms, and other content for toggling -->
+          <div class="navbar-collapse collapse">
+            <ul class="nav navbar-nav">
+              <li><a href="#">Courses</a></li>
+              <li><a href="#">Calendar</a></li>
+            </ul>
+            <div class="navbar-right">
+              <a href="/login/" class="btn btn-default navbar-btn">Sign In</a>
+            </div>
+          </div>
+        </div>
+      </div>
 
-    <!-- jQuery + Bootstrap JS -->
-    {% bootstrap_javascript jquery=True %}
+      <!--
+        TODO: customize messages from django.contrib.messages
+        https://docs.djangoproject.com/en/1.7/ref/contrib/messages/
+      -->
+      {% bootstrap_messages %}
+
+      {% block content %}{% endblock %}
+
+    </div>
+
+    <!-- load scripts at the end so the page loads faster +1 :) -->
+    <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
+    {% bootstrap_javascript %}
   </body>
 </html>
