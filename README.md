@@ -1,4 +1,4 @@
-workshop
-========
+workshop-django
+===============
 
-Workshop Registration Made Easy
+Workshop Registration Made Easy (Django version)
