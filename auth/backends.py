@@ -11,9 +11,7 @@ from django.contrib.auth.hashers import make_password
 from profiles.models import Profile
 
 class LDAPBackend(object):
-  # FIXME: there is no 'profile' app logger defined, so this is pointless right
-  # now.  need to setup logging so it works w/o so much manual config
-  logger = logging.getLogger(__name__)
+  logger = logging.getLogger("workshop.auth.ldap")
 
   uri = settings.LDAP_AUTH['uri']
   base = settings.LDAP_AUTH['base']
